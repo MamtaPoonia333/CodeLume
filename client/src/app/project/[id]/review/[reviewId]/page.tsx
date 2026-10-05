@@ -1,0 +1,7 @@
+'use client';
+import { useParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { api } from '../../../../../lib/api';
+import type { Review } from '../../../../../types';
+import { IssueList } from '../../../../../components/reviews/IssueList';
+export default function ReviewDetailPage() { const { reviewId } = useParams<{ reviewId: string }>(); const [review, setReview] = useState<Review | null>(null); const [error, setError] = useState(''); useEffect(() => { void api<{ review: Review }>(`/reviews/${reviewId}`).then((result) => setReview(result.review)).catch((err) => setError(err instanceof Error ? err.message : 'Unable to load review')); }, [reviewId]); if (error) return <p className="text-red-400">{error}</p>; if (!review) return <p>Loading review…</p>; return <section className="space-y-6"><header><p className="text-sm uppercase text-slate-400">{review.status} · {review.severity || 'Unrated'}</p><h1 className="text-2xl font-bold">Review details</h1><p className="mt-2 text-slate-300">{review.summary}</p></header><section><h2 className="mb-3 text-lg font-semibold">Issues ({review.issues.length})</h2><IssueList issues={review.issues} /></section><section><h2 className="mb-3 text-lg font-semibold">Recommendations</h2><ul className="list-disc space-y-2 pl-5">{review.recommendations.map((item) => <li key={item}>{item}</li>)}</ul></section></section>; }

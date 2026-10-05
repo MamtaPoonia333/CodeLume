@@ -1,0 +1,9 @@
+export type Severity = 'Critical' | 'High' | 'Medium' | 'Low';
+export type Review = { _id: string; summary?: string; severity?: string; recommendations: string[]; issues: Issue[]; status: 'pending' | 'complete' | 'failed'; error?: string; createdAt: string; projectId: string };
+export type Issue = { title?: string; description: string; file?: string; line?: number; severity?: string };
+export type Project = { id: string; name: string; description?: string };
+export type FileEntry = { id: string; path: string; content?: string };
+export type ApiProject = { _id: string; name: string; description?: string; createdAt: string };
+export type ApiFile = { _id: string; path: string; language?: string; sizeBytes: number };
+export type TreeNode = { name: string; path: string; children?: TreeNode[] };
+export type Provider = { _id: string; label: string; baseUrl: string; model: string };

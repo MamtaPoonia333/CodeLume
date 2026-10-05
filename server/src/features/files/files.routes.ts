@@ -1,0 +1,14 @@
+import { Router } from 'express';
+import { z } from 'zod';
+import { requireAuth } from '../../middleware/auth.js';
+import { upload as uploadMiddleware } from '../../middleware/upload.js';
+import { validate } from '../../middleware/validate.js';
+import { content, list, remove, tree, upload } from './files.controller.js';
+export const filesRoutes = Router();
+const idSchema = z.object({ id: z.string().regex(/^[a-f\d]{24}$/i) });
+filesRoutes.use(requireAuth);
+filesRoutes.post('/projects/:id/upload', validate({ params: idSchema }), uploadMiddleware.single('zip'), upload);
+filesRoutes.get('/projects/:id/files', validate({ params: idSchema }), list);
+filesRoutes.get('/projects/:id/tree', validate({ params: idSchema }), tree);
+filesRoutes.get('/files/:fileId/content', validate({ params: z.object({ fileId: idSchema.shape.id }) }), content);
+filesRoutes.delete('/files/:fileId', validate({ params: z.object({ fileId: idSchema.shape.id }) }), remove);

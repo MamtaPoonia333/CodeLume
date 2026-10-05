@@ -1,0 +1,13 @@
+import { Router } from 'express';
+import { z } from 'zod';
+import { requireAuth } from '../../middleware/auth.js';
+import { validate } from '../../middleware/validate.js';
+import { create, get, list } from './reviews.controller.js';
+export const reviewsRoutes = Router();
+const id = z.object({ id: z.string().regex(/^[a-f\d]{24}$/i) });
+const createSchema = z.object({ projectId: id.shape.id, fileIds: z.array(id.shape.id).optional(), scope: z.enum(['SINGLE_FILE', 'MULTI_FILE', 'PROJECT']), template: z.enum(['SECURITY', 'PERFORMANCE', 'QUALITY']), providerId: id.shape.id });
+const listSchema = z.object({ projectId: z.string().regex(/^[a-f\d]{24}$/i), q: z.string().trim().max(200).optional() });
+reviewsRoutes.use(requireAuth);
+reviewsRoutes.post('/', validate({ body: createSchema }), create);
+reviewsRoutes.get('/', validate({ query: listSchema }), list);
+reviewsRoutes.get('/:id', validate({ params: id }), get);

@@ -1,0 +1,5 @@
+import { FormEvent, useState } from 'react';
+import { Button } from '../ui/Button';
+import { Input } from '../ui/Input';
+import { MessageBubble } from './MessageBubble';
+export function ChatWindow({ messages, onSend, disabled }: { messages: { role: string; content: string }[]; onSend: (message: string) => void; disabled?: boolean }) { const [value, setValue] = useState(''); function submit(event: FormEvent) { event.preventDefault(); if (!value.trim()) return; onSend(value.trim()); setValue(''); } return <section className="space-y-4"><div className="min-h-96 space-y-3 rounded border border-slate-700 bg-slate-950 p-4">{messages.length ? messages.map((message, index) => <div key={`${message.role}-${index}`}><p className="mb-1 text-xs uppercase text-slate-500">{message.role}</p><MessageBubble content={message.content} /></div>) : <p className="text-slate-500">Ask a question about the uploaded code.</p>}</div><form className="flex gap-2" onSubmit={submit}><Input value={value} onChange={(event) => setValue(event.target.value)} placeholder="How does authentication work?" /><Button disabled={disabled || !value.trim()}>Send</Button></form></section>; }

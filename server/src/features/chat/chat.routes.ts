@@ -1,0 +1,10 @@
+import { Router } from 'express';
+import { z } from 'zod';
+import { requireAuth } from '../../middleware/auth.js';
+import { validate } from '../../middleware/validate.js';
+import { messages, send } from './chat.controller.js';
+export const chatRoutes = Router();
+const id = z.string().regex(/^[a-f\d]{24}$/i);
+chatRoutes.use(requireAuth);
+chatRoutes.post('/sessions/:projectId', validate({ params: z.object({ projectId: id }), body: z.object({ message: z.string().min(1).max(20_000), providerId: id, sessionId: id.optional() }) }), send);
+chatRoutes.get('/sessions/:id/messages', validate({ params: z.object({ id }) }), messages);

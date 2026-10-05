@@ -1,0 +1,15 @@
+import { Router } from 'express';
+import { requireAuth } from '../../middleware/auth.js';
+import { validate } from '../../middleware/validate.js';
+import { z } from 'zod';
+import { create, get, list, remove, update } from './projects.controller.js';
+export const projectsRoutes = Router();
+const idSchema = z.object({ id: z.string().regex(/^[a-f\d]{24}$/i) });
+const projectSchema = z.object({ name: z.string().min(1).max(120), description: z.string().max(1000).optional() });
+const projectUpdateSchema = projectSchema.partial().refine((value) => Object.keys(value).length > 0, 'At least one field is required');
+projectsRoutes.use(requireAuth);
+projectsRoutes.get('/', list);
+projectsRoutes.post('/', validate({ body: projectSchema }), create);
+projectsRoutes.get('/:id', validate({ params: idSchema }), get);
+projectsRoutes.patch('/:id', validate({ params: idSchema, body: projectUpdateSchema }), update);
+projectsRoutes.delete('/:id', validate({ params: idSchema }), remove);

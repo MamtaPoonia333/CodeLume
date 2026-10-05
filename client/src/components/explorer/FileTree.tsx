@@ -1,0 +1,4 @@
+import type { FileEntry } from '../../types';
+import type { TreeNode } from '../../types';
+function Nodes({ nodes, onSelect }: { nodes: TreeNode[]; onSelect: (path: string) => void }) { return <ul className="space-y-1 pl-3">{nodes.map((node) => <li key={node.path}><button className="text-left text-sm hover:text-blue-400" onClick={() => !node.children && onSelect(node.path)}>{node.children ? `📁 ${node.name}` : `📄 ${node.name}`}</button>{node.children && <Nodes nodes={node.children} onSelect={onSelect} />}</li>)}</ul>; }
+export function FileTree({ files, tree, onSelect }: { files?: FileEntry[]; tree?: TreeNode[]; onSelect: (path: string) => void }) { return tree ? <Nodes nodes={tree} onSelect={onSelect} /> : <Nodes nodes={(files ?? []).map((file) => ({ name: file.path, path: file.path }))} onSelect={onSelect} />; }

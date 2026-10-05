@@ -1,0 +1,20 @@
+import { Router } from 'express';
+import { authRoutes } from './features/auth/auth.routes.js';
+import { projectsRoutes } from './features/projects/projects.routes.js';
+import { filesRoutes } from './features/files/files.routes.js';
+import { reviewsRoutes } from './features/reviews/reviews.routes.js';
+import { chatRoutes } from './features/chat/chat.routes.js';
+import { aiProvidersRoutes } from './features/ai-providers/aiProviders.routes.js';
+import { docsRoutes } from './features/bonus/docs-generator/docs.routes.js';
+import { debtRoutes } from './features/bonus/debt-scanner/debt.routes.js';
+
+export const routes = Router();
+routes.get('/', (_req, res) => res.json({ name: 'code-review-assistant-api', version: '0.1.0' }));
+routes.use('/auth', authRoutes);
+routes.use('/projects', projectsRoutes);
+routes.use('/', filesRoutes);
+routes.use('/reviews', reviewsRoutes);
+routes.use('/chat', chatRoutes);
+routes.use('/ai-providers', aiProvidersRoutes);
+routes.use('/bonus/docs', docsRoutes);
+routes.use('/bonus/debt', debtRoutes);
