@@ -19,7 +19,7 @@ export const ReviewSchema = new Schema({
   issues: [IssueSchema],
   recommendations: [{ type: String, trim: true }],
   severity: { type: String, enum: severities },
-  status: { type: String, enum: ['pending', 'complete', 'failed'], default: 'pending', required: true },
+  status: { type: String, enum: ['pending', 'processing', 'complete', 'failed'], default: 'pending', required: true },
   error: { type: String, trim: true }
 }, { timestamps: true });
 

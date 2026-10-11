@@ -1,5 +1,5 @@
 export type Severity = 'Critical' | 'High' | 'Medium' | 'Low';
-export type Review = { _id: string; summary?: string; severity?: string; recommendations: string[]; issues: Issue[]; status: 'pending' | 'complete' | 'failed'; error?: string; createdAt: string; projectId: string };
+export type Review = { _id: string; summary?: string; severity?: string; recommendations: string[]; issues: Issue[]; status: 'pending' | 'processing' | 'complete' | 'failed'; error?: string; createdAt: string; updatedAt?: string; projectId: string };
 export type Issue = { title?: string; description: string; file?: string; line?: number; severity?: string };
 export type Project = { id: string; name: string; description?: string };
 export type FileEntry = { id: string; path: string; content?: string };

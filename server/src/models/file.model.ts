@@ -9,7 +9,10 @@ export const FileSchema = new Schema({
 }, { timestamps: true });
 
 FileSchema.index({ projectId: 1, path: 1 }, { unique: true });
-FileSchema.index({ path: 'text', content: 'text' });
+FileSchema.index(
+  { path: 'text', content: 'text' },
+  { language_override: 'textLanguage' }
+);
 
 export type FileDocument = InferSchemaType<typeof FileSchema>;
 export const File = model('File', FileSchema);

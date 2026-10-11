@@ -1,6 +1,7 @@
 import type { ErrorRequestHandler } from 'express';
 import multer from 'multer';
 import { z } from 'zod';
+import { env } from '../config/env.js';
 import { AppError } from '../utils/errors.js';
 
 export const errorHandler: ErrorRequestHandler = (error, _req, res, _next) => {
@@ -18,5 +19,13 @@ export const errorHandler: ErrorRequestHandler = (error, _req, res, _next) => {
   if (error?.name === 'ValidationError') {
     return res.status(400).json({ error: { code: 'MODEL_VALIDATION_ERROR', message: error.message } });
   }
-  res.status(500).json({ error: { code: 'INTERNAL_ERROR', message: 'An unexpected error occurred' } });
+  const message = env.NODE_ENV === 'development' && error instanceof Error
+    ? error.message
+    : 'An unexpected error occurred';
+  res.status(500).json({
+    error: {
+      code: 'INTERNAL_ERROR',
+      message
+    }
+  });
 };
